@@ -1,17 +1,14 @@
 const axios = require('axios');
 const { validatePincode } = require('../src/pincodeValidator');
 
-// Mock axios to avoid real API calls during tests
 jest.mock('axios');
 
 describe('validatePincode', () => {
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
   test('should validate correct PIN code and return details', async () => {
-    // Mock API response for a valid PIN code
     const mockResponse = {
       data: [{
         Status: 'Success',
@@ -47,7 +44,6 @@ describe('validatePincode', () => {
   });
 
   test('should return false for non-existent PIN code', async () => {
-    // Mock API response for non-existent PIN code
     const mockResponse = {
       data: [{ Status: 'Error', PostOffice: null }]
     };
@@ -62,7 +58,6 @@ describe('validatePincode', () => {
   });
 
   test('should handle API request failure', async () => {
-    // Mock API error
     axios.get.mockRejectedValue(new Error('Network Error'));
 
     const result = await validatePincode('110001');
@@ -101,7 +96,6 @@ describe('validatePincode', () => {
   });
 
   test('should handle multiple valid PIN codes', async () => {
-    // Mock API response for another valid PIN code
     const mockResponse = {
       data: [{
         Status: 'Success',
@@ -128,7 +122,6 @@ describe('validatePincode', () => {
   });
 
   test('should handle API response with no PostOffice data', async () => {
-    // Mock API response with empty PostOffice
     const mockResponse = {
       data: [{ Status: 'Success', PostOffice: [] }]
     };

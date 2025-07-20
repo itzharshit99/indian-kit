@@ -4,10 +4,11 @@ async function validatePincode(pincode) {
   if (typeof pincode !== 'string' || !/^\d{6}$/.test(pincode)) {
     return { valid: false, details: null };
   }
+
   try {
     const response = await axios.get(`https://api.postalpincode.in/pincode/${pincode}`);
     const data = response.data[0];
-    if (data.Status === 'Success') {
+    if (data.Status === 'Success' && data.PostOffice && data.PostOffice.length > 0) {
       const postOffice = data.PostOffice[0];
       return {
         valid: true,
