@@ -1,12 +1,21 @@
 function validateIndianPhone(phone) {
-  if (!phone || typeof phone !== 'string') {
+  if (typeof phone !== 'string') {
     throw new Error('Invalid phone number: Please provide a valid string');
   }
 
-  // Indian phone number regex: +91 or 10 digits starting with 6-9
-  const phoneRegex = /^(\+91[\-\s]?)?[6-9]\d{9}$/;
+  // Trim leading/trailing spaces (allowed)
+  const trimmed = phone.trim();
 
-  return phoneRegex.test(phone);
+  // Reject leading/trailing hyphens
+  if (trimmed.startsWith('-') || trimmed.endsWith('-')) {
+    return false;
+  }
+
+  // Remove internal spaces and hyphens
+  const cleaned = trimmed.replace(/[\s-]/g, '');
+
+  const phoneRegex = /^(\+91)?[6-9]\d{9}$/;
+  return phoneRegex.test(cleaned);
 }
 
 module.exports = { validateIndianPhone };
