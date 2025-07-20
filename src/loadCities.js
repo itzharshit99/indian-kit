@@ -1,9 +1,9 @@
-const fs = require('fs').promises;
+const fs = require('fs');
 const { parse } = require('csv-parse/sync');
 
-async function loadIndianCities() {
+function loadIndianCities() {
   try {
-    const fileContent = await fs.readFile('./data/india_cities_states.csv', 'utf-8');
+    const fileContent = fs.readFileSync('./data/india_cities_states.csv', 'utf-8');
     const records = parse(fileContent, {
       columns: true,
       skip_empty_lines: true,

@@ -1,10 +1,6 @@
 const { loadIndianCities } = require('./loadCities');
 
-let indianCities = [];
-
-(async () => {
-  indianCities = await loadIndianCities();
-})();
+const indianCities = loadIndianCities();
 
 function parseIndianAddress(address) {
   if (!address || typeof address !== 'string') {
@@ -13,8 +9,10 @@ function parseIndianAddress(address) {
 
   const pincodeRegex = /\b\d{6}\b/;
 
-  const states = [...new Set(indianCities.map(record => record.state))].join('|');
-  const stateRegex = new RegExp(`\\b(?:${states})\\b`, 'i');
+  const escapeRegex = (str) => str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
+
+  const states = [...new Set(indianCities.map(record => record.state))];
+  const stateRegex = new RegExp(`\\b(${states.map(escapeRegex).join('|')})\\b`, 'i');
 
   const result = {
     pincode: null,
@@ -33,13 +31,26 @@ function parseIndianAddress(address) {
     result.state = stateMatch[0];
   }
 
-  for (const { city, state } of indianCities) {
-    const cityRegex = new RegExp(`\\b${city}\\b(?=.*\\b${state}\\b)`, 'i');
-    const cityMatch = address.match(cityRegex);
-    if (cityMatch) {
-      result.city = cityMatch[0];
-      break;
+  const stateCities = result.state
+    ? indianCities
+        .filter(record => record.state.toLowerCase() === result.state.toLowerCase())
+        .map(record => record.city)
+    : indianCities.map(record => record.city);
+
+  const addressParts = address.split(',').map(part => part.trim()).reverse();
+
+  for (const city of stateCities) {
+    for (const part of addressParts) {
+      const cityRegex = new RegExp(`^${escapeRegex(city)}$`, 'i');
+      if (cityRegex.test(part)) {
+        if (result.state && city.toLowerCase() === result.state.toLowerCase()) {
+          continue; 
+        }
+        result.city = city;
+        break;
+      }
     }
+    if (result.city) break;
   }
 
   return result;
