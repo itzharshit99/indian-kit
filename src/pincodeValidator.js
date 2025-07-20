@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function validatePincode(pincode) {
-  if (!/^\d{6}$/.test(pincode)) {
+  if (typeof pincode !== 'string' || !/^\d{6}$/.test(pincode)) {
     return { valid: false, details: null };
   }
   try {
