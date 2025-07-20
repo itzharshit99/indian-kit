@@ -11,5 +11,8 @@
   "description": "",
   "devDependencies": {
     "jest": "^30.0.4"
+  },
+  "dependencies": {
+    "csv-parse": "^6.1.0"
   }
 }
