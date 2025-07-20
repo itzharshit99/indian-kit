@@ -1,9 +1,7 @@
-// tests/phoneValidator.test.js
 const { validateIndianPhone } = require('../src/phoneValidator');
 
 describe('validateIndianPhone', () => {
   test('should validate correct Indian phone number', () => {
-    // Basic valid numbers
     expect(validateIndianPhone('+919876543210')).toBe(true);
     expect(validateIndianPhone('9876543210')).toBe(true);
   });
