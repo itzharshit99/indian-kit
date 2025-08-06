@@ -5,10 +5,14 @@
   "scripts": {
     "test": "jest"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["india", "address", "phone", "pincode", "geocoding"],
+  "author": "Harshit Jain iharshitjain99@gmail.com",
   "license": "ISC",
-  "description": "",
+  "repository": {
+    "type":"git",
+    "url":"https://github.com/itzharshit99/indian-kit"
+  },
+  "description": "A Node.js package for Indian address parsing, phone validation, PIN code validation, and  geocoding",
   "devDependencies": {
     "jest": "^30.0.4"
   },
