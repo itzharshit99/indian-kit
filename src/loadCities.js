@@ -1,9 +1,11 @@
 const fs = require('fs');
 const { parse } = require('csv-parse/sync');
+const path = require('path');
 
 function loadIndianCities() {
   try {
-    const fileContent = fs.readFileSync('./data/india_cities_states.csv', 'utf-8');
+    const csvPath = path.join(__dirname, '../data/india_cities_states.csv');
+    const fileContent = fs.readFileSync(csvPath, 'utf-8');
     const records = parse(fileContent, {
       columns: true,
       skip_empty_lines: true,
@@ -11,7 +13,8 @@ function loadIndianCities() {
     });
     return records.map(record => ({
       city: record.city,
-      state: record.state
+      state: record.state,
+      pincode: record.pincode // Ensure pincode is included
     }));
   } catch (error) {
     console.error('Error loading cities:', error);
